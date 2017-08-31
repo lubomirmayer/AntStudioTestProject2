@@ -1,0 +1,1 @@
+[2017-08-30 15-41-53] Fatal Error: Class 'Kdyby\Doctrine\Entities\BaseEntity' not found in C:\xampp\htdocs\PhpProject2\app\model\Author2.php:11  @  CLI (PID: 11164): www/index.php o:s:u --dump-sql  @@  exception--2017-08-30--15-41--794e2735d4.html
