@@ -3,6 +3,7 @@
 namespace App\Presenters;
 
 use App\Model\Author;
+use App\Model\Article;
 use \Nette\Application\UI\Form;
 
 class MainPresenter extends BasePresenter
@@ -62,6 +63,19 @@ public function authorFormSucceeded($form, $values)
     $author = new Author();
     $author->setName($values->authorName);
     $author->setEmail($values->authorEmail);
+    
+    $this->EntityManager->persist($author);
+    $this->EntityManager->flush();
+    
+    $article = new Article();
+    $article->setName($values->bookName);
+    $article->setAuthor($author);
+    $this->EntityManager->persist($article);
+    
+    $articles = new \Doctrine\Common\Collections\ArrayCollection();
+    $articles->add($article);
+    
+    $author->setArticles($articles);
     $this->EntityManager->persist($author);
     $this->EntityManager->flush();
 }

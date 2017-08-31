@@ -27,8 +27,18 @@ class Author extends \Kdyby\Doctrine\Entities\BaseEntity
      */
     protected $email;
     
+    /**
+     * One Product has Many Features.
+     * @ORM\OneToMany(targetEntity="Article", mappedBy="author")
+     */
+    private $articles;
+    
     public function setName($name) {
         $this->name=$name;
+    }
+    
+    public function setArticles($articles) {
+        $this->articles=$articles;
     }
     
     public function setEmail($email) {
@@ -39,4 +49,6 @@ class Author extends \Kdyby\Doctrine\Entities\BaseEntity
     
     public function getEmail() {return $this->email;}
 
+    public function getArticles() {return $this->articles;}
+    
 }
