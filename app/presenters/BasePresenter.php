@@ -10,4 +10,9 @@ use Nette;
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
+    public function afterRender()
+    {
+        if ($this->isAjax() && $this->hasFlashSession())
+            $this->invalidateControl('flashes');
+    }
 }

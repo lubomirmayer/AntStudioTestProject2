@@ -8,6 +8,7 @@ class Template929dd34c05 extends Latte\Runtime\Template
 	public $blocks = [
 		'content' => 'blockContent',
 		'title' => 'blockTitle',
+		'_newRecordAdded' => 'blockNewRecordAdded',
 		'scripts' => 'blockScripts',
 		'head' => 'blockHead',
 	];
@@ -15,6 +16,7 @@ class Template929dd34c05 extends Latte\Runtime\Template
 	public $blockTypes = [
 		'content' => 'html',
 		'title' => 'html',
+		'_newRecordAdded' => 'html',
 		'scripts' => 'html',
 		'head' => 'html',
 	];
@@ -57,8 +59,10 @@ class Template929dd34c05 extends Latte\Runtime\Template
 </div>
 
 <div id="content">
+<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('newRecordAdded')) ?>"><?php
+		$this->renderBlock('_newRecordAdded', $this->params) ?></div>    
 <?php
-		/* line 9 */ $_tmp = $this->global->uiControl->getComponent("newAuthorForm");
+		/* line 13 */ $_tmp = $this->global->uiControl->getComponent("newAuthorForm");
 		if ($_tmp instanceof Nette\Application\UI\IRenderable) $_tmp->redrawControl(null, false);
 		$_tmp->render();
 ?>
@@ -73,6 +77,18 @@ class Template929dd34c05 extends Latte\Runtime\Template
 		extract($_args);
 ?>	<h1>Přidání autora a knihy do databáze</h1>
 <?php
+	}
+
+
+	function blockNewRecordAdded($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("newRecordAdded", "static");
+?>
+        
+<?php
+		$this->global->snippetDriver->leave();
+		
 	}
 
 

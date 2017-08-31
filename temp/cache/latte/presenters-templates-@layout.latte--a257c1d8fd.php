@@ -7,11 +7,13 @@ class Templatea257c1d8fd extends Latte\Runtime\Template
 {
 	public $blocks = [
 		'head' => 'blockHead',
+		'_flashes' => 'blockFlashes',
 		'scripts' => 'blockScripts',
 	];
 
 	public $blockTypes = [
 		'head' => 'html',
+		'_flashes' => 'html',
 		'scripts' => 'html',
 	];
 
@@ -44,16 +46,8 @@ class Templatea257c1d8fd extends Latte\Runtime\Template
 </head>
 
 <body>
-<?php
-		$iterations = 0;
-		foreach ($flashes as $flash) {
-			?>	<div<?php if ($_tmp = array_filter(['flash', $flash->type])) echo ' class="', LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>><?php
-			echo LR\Filters::escapeHtmlText($flash->message) /* line 18 */ ?></div>
-<?php
-			$iterations++;
-		}
-?>
-
+<div id="<?php echo htmlSpecialChars($this->global->snippetDriver->getHtmlId('flashes')) ?>"><?php $this->renderBlock('_flashes', $this->params) ?></div>
+            
 <?php
 		$this->renderBlock('content', $this->params, 'html');
 ?>
@@ -71,7 +65,7 @@ class Templatea257c1d8fd extends Latte\Runtime\Template
 	function prepare()
 	{
 		extract($this->params);
-		if (isset($this->params['flash'])) trigger_error('Variable $flash overwritten in foreach on line 18');
+		if (isset($this->params['flash'])) trigger_error('Variable $flash overwritten in foreach on line 19');
 		Nette\Bridges\ApplicationLatte\UIRuntime::initialize($this, $this->parentName, $this->blocks);
 		
 	}
@@ -83,13 +77,30 @@ class Templatea257c1d8fd extends Latte\Runtime\Template
 	}
 
 
+	function blockFlashes($_args)
+	{
+		extract($_args);
+		$this->global->snippetDriver->enter("flashes", "static");
+		$iterations = 0;
+		foreach ($flashes as $flash) {
+			?>            <div<?php if ($_tmp = array_filter(['flash', $flash->type])) echo ' class="', LR\Filters::escapeHtmlAttr(implode(" ", array_unique($_tmp))), '"' ?>><?php
+			echo LR\Filters::escapeHtmlText($flash->message) /* line 19 */ ?></div>
+<?php
+			$iterations++;
+		}
+		$this->global->snippetDriver->leave();
+		
+	}
+
+
 	function blockScripts($_args)
 	{
 		extract($_args);
 ?>
 	<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 	<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>
-	<script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 25 */ ?>/js/main.js"></script>
+	<script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 28 */ ?>/js/main.js"></script>
+	<script src="<?php echo LR\Filters::escapeHtmlAttr(LR\Filters::safeUrl($basePath)) /* line 29 */ ?>/js/ajax.js"></script>
 <?php
 	}
 

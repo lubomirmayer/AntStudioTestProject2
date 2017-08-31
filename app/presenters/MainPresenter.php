@@ -38,6 +38,7 @@ class MainPresenter extends BasePresenter
 protected function createComponentNewAuthorForm()
 {
     $form = new Form  ;
+    $form->getElementPrototype()->class('ajax');
     $form->addText('authorName', 'Autor:')
         ->setType('text')
         ->setDefaultValue('')
@@ -78,6 +79,15 @@ public function authorFormSucceeded($form, $values)
     $author->setArticles($articles);
     $this->EntityManager->persist($author);
     $this->EntityManager->flush();
+    
+    $this->flashMessage('Zaznam zalozen');
+    if (!$this->isAjax())
+        $this->redirect('this');
+    else {
+        $this->invalidateControl('list');
+        $this->invalidateControl('form');
+        $form->setValues([], true);
+    }
 }
 
 }
